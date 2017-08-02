@@ -11,6 +11,7 @@
 		-权限(privilege) in（'学生'(S) or '管理员'(A)） char(5)
 	-素材(material)
 		-素材ID(id) int
+		-素材名称(name) char(50)
 		-上传者ID(uploader_id) int
 		-拍摄日期(time) datetime
 		-备注(comments) char(300)
