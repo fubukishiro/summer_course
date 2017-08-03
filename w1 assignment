@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style> 
+li
+{
+border:5px solid black;
+height:100px;
+width:200px;
+opacity:0.3;
+margin-bottom:10px;
+}
+.block1{
+background-color:red;
+}
+.block2{
+background-color:yellow;
+}
+.block3{
+background-color:green;
+}
+</style>
+</head>
+<body>
+
+<li class="block1"></li>
+<li class="block2"></li>
+<li class="block3"></li>
+
+</body>
+</html>
