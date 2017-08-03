@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>NEW</title>
+    <div>
+    <h1 class="biaoti" style="color: blue;background-color: yellow;">NEW METERIAL</h1>
+    </div>
 </head>
 <body>
-    <div>
-        <h1 class="biaoti" style="color: blue;background-color: yellow;">NEW METERIAL</h1>
-        <form method="post">
-            <p><input type="text" class="font_bk" style="width: 250px;"  required="required" placeholder="姓名" name="name"></input></p>
-            <p><input type="text" class="font_bk" style="width: 250px;"  required="required" placeholder="学号" name="number"></input></p>
-            <p><input type="text" class="font_bk" style="width: 250px;"  required="required" placeholder="素材标签" name="lebel"></input></p>
-            <p><input type="text" class="font_bk" style="width: 250px;"  required="required" placeholder="拍摄日期" name="date"></input></p>
-            <p><input type="text" class="font_bk" style="width: 250px;"  required="required" placeholder="完成人员" name="people"></input></p>
-            <p><input type="text" class="font_bk" style="width: 250px;"  required="required" placeholder="备注" name="remark"></input></p>
-            <p><input type="file" class="font_bk" required="required" placeholder="选择文件" name=""></input></p>
-            <p><button class="but" type="submit">提交</button></p>
-        </form>
-    </div>
+    <form method="post">
+        <p><span>姓名：</span><input type="text" class="font_bk" style="width: 250px;" required="required" placeholder="请输入文字" name="name"></input></p>
+        <p><span>学号：</span><input type="text" class="font_bk" style="width: 250px;" required="required" placeholder="请输入文字" name="number"></input></p>
+        <p><span>素材标签：</span><input type="text" class="font_bk" style="width: 250px;" required="required" placeholder="请输入文字" name="lebel"></input></p>
+        <p><span>拍摄日期：</span><input type="text" class="font_bk" style="width: 250px;" required="required" placeholder="请输入文字" name="date"></input></p>
+        <p><span>完成人员：</span><input type="text" class="font_bk" style="width: 250px;" required="required" placeholder="请输入文字" name="people"></input></p>
+        <p><span>备注：</span><input type="text" class="font_bk" style="width: 250px;" required="required" placeholder="请输入文字" name="remark"></input></p>
+        <p><span>选择文件：</span><input type="file" class="font_bk" name=""></input></p>
+        <p><button class="but" type="submit">提交</button></p>
+    </form>
+
+<style>
+  .button{
+  margin-right:1000px;
+  }
+  span{padding-right:20px;width:10em;display:block;float:left;}
+</style>
 
 <style>
 .font_bk{border:5px solid #ccc;}
@@ -29,7 +35,9 @@
         height: 100px;
            line-height: 100px;
         }
+</style>
 
+<style>
 button {
   margin-right: 0px;
   margin-left: 0px;
