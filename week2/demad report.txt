@@ -4,7 +4,7 @@
 -关系与属性
 	-用户(user)
 		-用户ID(id) int
-		-账号 char(20)
+		-账号(username) char(20)
 		-姓名(name) char(20)
 		-密码(password) char(20)
 		-学号(student_number) int
