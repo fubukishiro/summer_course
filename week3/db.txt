@@ -1,0 +1,42 @@
+CREATE DATABASE material;
+CREATE TABLE users
+(
+id int NOT NULL,
+student_number int,
+privilege char(5),
+name char(20),
+PRIMARY KEY (id)
+);
+CREATE TABLE materials
+(
+id int NOT NULL AUTO_INCREMENT,
+name char(20) NOT NULL,
+uploader_id int,
+time date,
+comments char(255),
+PRIMARY KEY (id)
+);
+CREATE TABLE tags
+(
+id int NOT NULL AUTO_INCREMENT,
+name char(20) NOT NULL,
+PRIMARY KEY (id)
+);
+CREATE TABLE material_tag
+(
+id int NOT NULL AUTO_INCREMENT,
+material_id int,
+tag_id int,
+PRIMARY KEY (id),
+FOREIGN KEY (material_id) REFERENCES materials(id),
+FOREIGN KEY (tag_id) REFERENCES tags(id)
+);
+CREATE TABLE material_user
+(
+id int NOT NULL AUTO_INCREMENT,
+material_id int,
+user_id int,
+PRIMARY KEY (id),
+FOREIGN KEY (material_id) REFERENCES materials(id),
+FOREIGN KEY (user_id) REFERENCES users(id)
+);
