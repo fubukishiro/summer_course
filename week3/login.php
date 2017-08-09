@@ -24,6 +24,14 @@
             </div>
           </div>
           <br>
+          <div id="error" class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">
+                &times;
+              </span>
+            </button>
+            用户名或密码错误
+          </div>
           <div style="text-align:center">
             <button type="submit" class="btn btn-primary">
                 登录
@@ -33,12 +41,14 @@
       </div>
     </div>
     <style>
-      #box{
+      #box
+      {
         padding-bottom:500px;
         background-image:url(img/login-background.jpg);
         background-repeat:no-repeat;
       }
-      #login-box{
+      #login-box
+      {
         background:#ffffff;
         border:1px solid #ccc;
         border-radius:4px;
@@ -46,35 +56,66 @@
         padding-top:35px;
         padding-bottom:20px;
       }
+      #error
+      {
+        display:none;
+      }
     </style>
+    <?php
+      session_start();
+      require "db.inc.php";
+      $API_URL = "https://api.zjubtv.com/Passport/userLogin";
+      if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['username']) && !empty($_POST['password']))
+      {
+        $post_data = array
+        (
+          "identity" => $_POST['username'],
+          "password" => $_POST['password']
+        );
+        if (filter_var($_POST['username'], FILTER_VALIDATE_EMAIL)) $post_data['type'] = 2;
+        $postdata = http_build_query($post_data);
+        $options = array
+        (
+          "http" => array
+          (
+            "method" => 'POST',
+            "header" => 'Content-type:application/x-www-form-urlencoded',
+            "content" => $postdata,
+            "timeout" => 15 * 60
+          )
+        );
+        $context = stream_context_create($options);
+        $result = file_get_contents($API_URL, false, $context);
+        $data = json_decode($result, true);
+        if ($data[0] == -1)
+        {
+          http_response_code(400);
+    ?>
+    <style>
+      #error
+      {
+        display:block;
+      }
+    </style>
+    <?php
+        }
+        else
+        {
+          $_SESSION['id'] = $data[0];
+          $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?');
+          $stmt->execute($data[0]);
+          $result = $stmt->fetch();
+          http_response_code(400);
+          if ($result == false)
+          {
+            header("Location:initial.php");
+          }
+          else
+          {
+            header("Location:index.php");
+          }
+        }
+      }
+    ?>
   </body>
 </html>
-
-<?php
-  $API_URL = "https://api.zjubtv.com/Passport/userLogin";
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['username']) && !empty($_POST['password']))
-  {
-    $post_data = array
-    (
-      "identity" => $_POST['username'],
-      "password" => $_POST['password']
-    );
-    if (filter_var($_POST['username'], FILTER_VALIDATE_EMAIL)) $post_data['type'] = 2;
-    $postdata = http_build_query($post_data);
-    $options = array
-    (
-      "http" => array
-      (
-        "method" => 'POST',
-        "header" => 'Content-type:application/x-www-form-urlencoded',
-        "content" => $postdata,
-        "timeout" => 15 * 60
-      )
-    );
-    $context = stream_context_create($options);
-    $result = file_get_contents($API_URL, false, $context);
-    $data = json_decode($result, true);
-    if ($data[0] == -1) echo "用户名或密码错误";
-    else echo "ok";
-  }
-?>
