@@ -2,24 +2,25 @@ CREATE DATABASE material;
 CREATE TABLE users
 (
 id int NOT NULL,
-student_number int,
+student_number bigint,
 privilege char(5),
-name char(20),
+name char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
 PRIMARY KEY (id)
 );
 CREATE TABLE materials
 (
 id int NOT NULL AUTO_INCREMENT,
-name char(20) NOT NULL,
+file longblob NOT NULL,
+name char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 uploader_id int,
 time date,
-comments char(255),
+comments char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
 PRIMARY KEY (id)
 );
 CREATE TABLE tags
 (
 id int NOT NULL AUTO_INCREMENT,
-name char(20) NOT NULL,
+name char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 PRIMARY KEY (id)
 );
 CREATE TABLE material_tag

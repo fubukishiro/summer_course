@@ -87,9 +87,11 @@
         $context = stream_context_create($options);
         $result = file_get_contents($API_URL, false, $context);
         $data = json_decode($result, true);
-        if ($data[0] == -1)
+        $data[0] = (int)$data[0];
+        if ($data[0] <= 0)
         {
           http_response_code(400);
+          session_destroy();
     ?>
     <style>
       #error
@@ -103,7 +105,7 @@
         {
           $_SESSION['id'] = $data[0];
           $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?');
-          $stmt->execute($data[0]);
+          $stmt->execute([$data[0]]);
           $result = $stmt->fetch();
           http_response_code(400);
           if ($result == false)

@@ -17,15 +17,15 @@
           <?php
             session_start();
             require "db.inc.php";
-            if (!empty($_SESSION['id']))
+            if (empty($_SESSION['id']))
             {
           ?>
           <p class="navbar-text">
             您好！请先
           </p>
-          <button type="button" class="btn btn-primary navbar-btn">
+          <a class="btn btn-primary navbar-btn" href="login.php" role="button">
             登录
-          </button>
+          </a>
           <?php
             }
             else
@@ -34,20 +34,23 @@
           <p class="navbar-text">
             欢迎，
           <?php
-            $stmt = $stmt = $pdo->prepare('SELECT * FROM users WHERE id=?');
-            $stmt->execute($_SESSION['id']);
-            $resule = $stmt->fetch();
-            echo $result['name'];
+              $stmt = $stmt = $pdo->prepare('SELECT * FROM users WHERE id=?');
+              $stmt->execute([$_SESSION['id']]);
+              $result = $stmt->fetch();
+              echo $result['name'];
           ?>
           </p>
-          <button type="button" class="btn btn-danger navbar-btn">
+          <a class="btn btn-danger navbar-btn" href="logout.php" role="button">
             登出
-          </button>
+          </a>
+          <?php
+            }
+          ?>
         </div>
       </div>
     </nav>
     <div class="container">
-      <form class="form-horizontal">
+      <form class="form-horizontal" method="post">
         <div class="form-group">
           <label class="col-xs-2 col-xs-offset-1 control-label">素材名称</label>
           <div class="col-sm-7">
@@ -88,29 +91,47 @@
           <button type="submit" class="btn btn-primary" style="margin:0 7px 0 0">
             提交
           </button>
-          <button type="button" class="btn btn-primary" style="margin:0 0 0 7px">
+          <a class="btn btn-primary navbar-btn" href="index.php" role="button">
             返回
-          </button>
+          </a>
         </div>
       </form>
     </div>
   </body>
 </html>
 <?php
-  if (empty($_SESSION['id']))
+  if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['name']) && !empty($_POST['date']) && !empty($_POST['contributor']))
   {
-    http_response_code(401);
-    session_destroy();
-    header("Location:login.php");
-  }
-  else
-  {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['name']) && !empty($_POST['date']) && !empty($_POST['contributor']))
+    if (empty($_SESSION['id']))
     {
-      $stmt = $pdo->prepare('INSERT INTO materials(name, time, uploader_id, comments) VALUES(?, ?, ?, ?)');
-      $stmt->execute([$_POST['name'], $_POST['date'], $_SESSION['id'], $_SESSION['comments']]);
+      http_response_code(401);
+      session_destroy();
+      header("Location:login.php");
+    }
+    else
+    {
+      $stmt = $pdo->prepare('INSERT INTO materials(name, time, uploader_id, comments, file) VALUES(?, ?, ?, ?, ?)');
+      $stmt->execute([$_POST['name'], $_POST['date'], $_SESSION['id'], $_POST['comments'], $_POST['file']]);
+      $stmt = $pdo->prepare('SELECT * FROM materials WHERE name=? AND time=? AND uploader_id=? AND comments=? AND file=?');
+      $stmt->execute([$_POST['name'], $_POST['date'], $_SESSION['id'], $_POST['comments'], $_POST['file']]);
+      $result = $stmt->fetch();
+      $material_id = $result['id'];
+      $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+      $stmt->execute([$_POST['tag']]);
+      $result = $stmt->fetch();
+      if ($result == false)
+      {
+        $stmt = $pdo->prepare('INSERT INTO tags(name) VALUES(?)');
+        $stmt->execute([$_POST['tag']]);
+      }
+      $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+      $stmt->execute([$_POST['tag']]);
+      $result = $stmt->fetch();
+      $tag_id = $result['id'];
+      $stmt = $pdo->prepare('INSERT INTO material_tag(material_id, tag_id) VALUES(?, ?)');
+      $stmt->execute([$material_id, $tag_id]);
       http_response_code(302);
-      header("Location:upload.php");
+      header("Location:index.php");
     }
   }
 ?>
