@@ -8,6 +8,45 @@
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
   <body>
+    <script>
+      var count = 1;
+      function add()
+      {
+        count++;
+        var tag_id = "tag" + count;
+        var target = document.getElementById(tag_id);
+        target.style.display = "block";
+        target.value = "";
+        if (count > 1)
+        {
+          target = document.getElementById("decrease");
+          target.disabled = false;
+        }
+        if (count == 5)
+        {
+          target = document.getElementById("increase");
+          target.disabled = "disabled";
+        }
+      }
+      function deduct()
+      {
+        var tag_id = "tag" + count;
+        var target = document.getElementById(tag_id);
+        target.style.display = "none";
+        target.value = "";
+        if (count == 2)
+        {
+          target = document.getElementById("decrease");
+          target.disabled = "disabled";
+        }
+        if (count == 5)
+        {
+          target = document.getElementById("increase");
+          target.disabled = false;
+        }
+        count--;
+      }
+    </script>
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -59,8 +98,30 @@
         </div>
         <div class="form-group">
           <label class="col-xs-2 col-xs-offset-1 control-label">标签</label>
-          <div class="col-sm-7">
-            <input class="form-control" type="text" name="tag"/>
+          <div class="col-xs-7">
+            <input id="tag1" class="form-control" type="text" name="tag1"/>
+          </div>
+          <div class="col-xs-offset-3 col-xs-7">
+            <input id="tag2" class="form-control" type="text" name="tag2" style="display:none;margin-top:15px"/>
+          </div>
+          <div class="col-xs-offset-3 col-xs-7">
+            <input id="tag3" class="form-control" type="text" name="tag3" style="display:none;margin-top:15px"/>
+          </div>
+          <div class="col-xs-offset-3 col-xs-7">
+            <input id="tag4" class="form-control" type="text" name="tag4" style="display:none;margin-top:15px"/>
+          </div>
+          <div class="col-xs-offset-3 col-xs-7">
+            <input id="tag5" class="form-control" type="text" name="tag5" style="display:none;margin-top:15px"/>
+          </div>
+          <div class="col-xs-6 col-xs-offset-3" style="margin-top:15px">
+            <button id="increase" class="btn btn-success" type="button" onclick="add()">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+              新增一个标签
+            </button>
+            <button id="decrease" class="btn btn-warning" type="button" onclick="deduct()" disabled="disabled">
+              <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+              删除一个标签
+            </button>
           </div>
         </div>
         <div class="form-group">
@@ -106,7 +167,11 @@
     {
       http_response_code(401);
       session_destroy();
-      header("Location:login.php");
+?>
+      <script>
+        window.location.href='login.php';
+      </script>
+<?php
     }
     else
     {
@@ -116,22 +181,97 @@
       $stmt->execute([$_POST['name'], $_POST['date'], $_SESSION['id'], $_POST['comments'], $_POST['file']]);
       $result = $stmt->fetch();
       $material_id = $result['id'];
-      $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
-      $stmt->execute([$_POST['tag']]);
-      $result = $stmt->fetch();
-      if ($result == false)
+      if (!empty($_POST['tag1']))
       {
-        $stmt = $pdo->prepare('INSERT INTO tags(name) VALUES(?)');
-        $stmt->execute([$_POST['tag']]);
+        $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+        $stmt->execute([$_POST['tag1']]);
+        $result = $stmt->fetch();
+        if ($result == false)
+        {
+          $stmt = $pdo->prepare('INSERT INTO tags(name) VALUES(?)');
+          $stmt->execute([$_POST['tag1']]);
+        }
+        $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+        $stmt->execute([$_POST['tag1']]);
+        $result = $stmt->fetch();
+        $tag_id = $result['id'];
+        $stmt = $pdo->prepare('INSERT INTO material_tag(material_id, tag_id) VALUES(?, ?)');
+        $stmt->execute([$material_id, $tag_id]);
       }
-      $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
-      $stmt->execute([$_POST['tag']]);
-      $result = $stmt->fetch();
-      $tag_id = $result['id'];
-      $stmt = $pdo->prepare('INSERT INTO material_tag(material_id, tag_id) VALUES(?, ?)');
-      $stmt->execute([$material_id, $tag_id]);
+      if (!empty($_POST['tag2']))
+      {
+        $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+        $stmt->execute([$_POST['tag2']]);
+        $result = $stmt->fetch();
+        if ($result == false)
+        {
+          $stmt = $pdo->prepare('INSERT INTO tags(name) VALUES(?)');
+          $stmt->execute([$_POST['tag2']]);
+        }
+        $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+        $stmt->execute([$_POST['tag2']]);
+        $result = $stmt->fetch();
+        $tag_id = $result['id'];
+        $stmt = $pdo->prepare('INSERT INTO material_tag(material_id, tag_id) VALUES(?, ?)');
+        $stmt->execute([$material_id, $tag_id]);
+      }
+      if (!empty($_POST['tag3']))
+      {
+        $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+        $stmt->execute([$_POST['tag3']]);
+        $result = $stmt->fetch();
+        if ($result == false)
+        {
+          $stmt = $pdo->prepare('INSERT INTO tags(name) VALUES(?)');
+          $stmt->execute([$_POST['tag3']]);
+        }
+        $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+        $stmt->execute([$_POST['tag3']]);
+        $result = $stmt->fetch();
+        $tag_id = $result['id'];
+        $stmt = $pdo->prepare('INSERT INTO material_tag(material_id, tag_id) VALUES(?, ?)');
+        $stmt->execute([$material_id, $tag_id]);
+      }
+      if (!empty($_POST['tag4']))
+      {
+        $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+        $stmt->execute([$_POST['tag4']]);
+        $result = $stmt->fetch();
+        if ($result == false)
+        {
+          $stmt = $pdo->prepare('INSERT INTO tags(name) VALUES(?)');
+          $stmt->execute([$_POST['tag4']]);
+        }
+        $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+        $stmt->execute([$_POST['tag4']]);
+        $result = $stmt->fetch();
+        $tag_id = $result['id'];
+        $stmt = $pdo->prepare('INSERT INTO material_tag(material_id, tag_id) VALUES(?, ?)');
+        $stmt->execute([$material_id, $tag_id]);
+      }
+      if (!empty($_POST['tag5']))
+      {
+        $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+        $stmt->execute([$_POST['tag5']]);
+        $result = $stmt->fetch();
+        if ($result == false)
+        {
+          $stmt = $pdo->prepare('INSERT INTO tags(name) VALUES(?)');
+          $stmt->execute([$_POST['tag5']]);
+        }
+        $stmt = $pdo->prepare('SELECT * FROM tags WHERE name=?');
+        $stmt->execute([$_POST['tag5']]);
+        $result = $stmt->fetch();
+        $tag_id = $result['id'];
+        $stmt = $pdo->prepare('INSERT INTO material_tag(material_id, tag_id) VALUES(?, ?)');
+        $stmt->execute([$material_id, $tag_id]);
+      }
       http_response_code(302);
-      header("Location:index.php");
+?>
+      <script>
+        window.location.href='index.php';
+      </script>
+<?php
     }
   }
 ?>
