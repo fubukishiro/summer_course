@@ -175,8 +175,8 @@
     }
     else
     {
-      $stmt = $pdo->prepare('INSERT INTO materials(name, time, uploader_id, comments, file) VALUES(?, ?, ?, ?, ?)');
-      $stmt->execute([$_POST['name'], $_POST['date'], $_SESSION['id'], $_POST['comments'], $_POST['file']]);
+      $stmt = $pdo->prepare('INSERT INTO materials(name, time, uploader_id, comments, file, contributor) VALUES(?, ?, ?, ?, ?, ?)');
+      $stmt->execute([$_POST['name'], $_POST['date'], $_SESSION['id'], $_POST['comments'], $_POST['file'], $_POST['contributor']]);
       $stmt = $pdo->prepare('SELECT * FROM materials WHERE name=? AND time=? AND uploader_id=? AND comments=? AND file=?');
       $stmt->execute([$_POST['name'], $_POST['date'], $_SESSION['id'], $_POST['comments'], $_POST['file']]);
       $result = $stmt->fetch();
