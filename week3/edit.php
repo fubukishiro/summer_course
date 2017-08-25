@@ -58,17 +58,25 @@
             require "db.inc.php";
             if (empty($_SESSION['id']))
             {
+              http_response_code(401);
           ?>
-          <p class="navbar-text">
-            您好！请先
-          </p>
-          <a class="btn btn-primary navbar-btn" href="login.php" role="button">
-            登录
-          </a>
+            <script>
+              window.location.href='login.php';
+            </script>
           <?php
             }
             else
             {
+              if (!isset($_GET['material_id']))
+              {
+          ?>
+            <script>
+              window.location.href='index.php';
+            </script>
+          <?php
+              }
+              else
+              {
           ?>
           <p class="navbar-text">
             欢迎，
@@ -83,6 +91,7 @@
             登出
           </a>
           <?php
+              }
             }
           ?>
         </div>
@@ -163,24 +172,21 @@
 <?php
   if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['name']) && !empty($_POST['date']) && !empty($_POST['contributor']))
   {
-    if (empty($_SESSION['id']))
+    $stmt = $pdo->prepare('SELECT * FROM materials WHERE id=?');
+    $stmt->execute([$_GET[material_id]]);
+    $result = $stmt->fetch();
+    if ($_SESSION['id'] != $result['uploader_id'])
     {
       http_response_code(401);
-      session_destroy();
-?>
-      <script>
-        window.location.href='login.php';
-      </script>
-<?php
+      exit("您只能修改自己的文章");
     }
     else
     {
-      $stmt = $pdo->prepare('INSERT INTO materials(name, time, uploader_id, comments, file, contributor) VALUES(?, ?, ?, ?, ?, ?)');
-      $stmt->execute([$_POST['name'], $_POST['date'], $_SESSION['id'], $_POST['comments'], $_POST['file'], $_POST['contributor']]);
-      $stmt = $pdo->prepare('SELECT * FROM materials WHERE name=? AND time=? AND uploader_id=? AND comments=? AND file=?');
-      $stmt->execute([$_POST['name'], $_POST['date'], $_SESSION['id'], $_POST['comments'], $_POST['file']]);
-      $result = $stmt->fetch();
-      $material_id = $result['id'];
+      $stmt = $pdo->prepare('UPDATE materials SET name=?, time=?, comments=?, file=?, contributor=? WHERE id=?');
+      $stmt->execute([$_POST['name'], $_POST['date'], $_POST['comments'], $_POST['file'], $_POST['contributor'], $_GET['material_id']]);
+      $stmt = $pdo->prepare('DELETE FROM material_tag WHERE material_id=?');
+      $stmt->execute([$_GET['material_id']]);
+      $material_id = $_GET['material_id'];
       $s = 'tag';
       $i = 1;
       while ($i <= 5)
