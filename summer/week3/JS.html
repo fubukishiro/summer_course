@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JS</title>
+</head>
+<body>
+<div></div>
+<div></div>
+
+<script type="text/javascript">
+
+window.onload =function(){
+				var x=document.getElementsByTagName('div');
+				for(var i=0;i<2;i++)
+				{
+					x[i].onmouseover=function(){
+
+					this.style.background="red";
+					this.style.borderColor="black";
+
+												}
+				}
+
+				for(var i=0;i<2;i++)
+				{
+					x[i].onmouseout=function(){
+
+					this.style.background="lightyellow";
+					this.style.borderColor="grey";
+
+												}
+				}
+			}
+
+
+</script>
+</body>
+</html>
+<style>
+div{
+	width: 400px;
+	height: 200px;
+	background-color: lightyellow;
+	border: 10px;
+	border-width: 10px;
+	border-style: solid;
+	border-color: grey;
+	margin-top: 20px;
+}
+</style>
