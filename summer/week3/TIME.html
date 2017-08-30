@@ -1,0 +1,60 @@
+<html>
+<head>
+<script type="text/javascript">
+function startTime()
+{
+var today=new Date()
+var W=today.getDay()
+var y=today.getFullYear()
+var M=today.getMonth()
+var d=today.getDate()
+var h=today.getHours()
+var m=today.getMinutes()
+var s=today.getSeconds()
+// add a zero in front of numbers<10
+switch (W)
+{
+case 0:
+  W="Sunday";
+  break;
+case 1:
+  W="Monday";
+  break;
+case 2:
+  W="Tuesday";
+  break;
+case 3:
+  W="Wednesday";
+  break;
+case 4:
+  W="Thursday";
+  break;
+case 5:
+  W="Friday";
+  break;
+case 6:
+  W="Saturday";
+  break;
+}
+m=checkTime(m)
+s=checkTime(s)
+document.getElementById('txt').innerHTML=y+"年"+M+"月"+d+"日"+"星期"+W+" "+h+":"+m+":"+s
+t=setTimeout('startTime()',500)
+}
+
+function checkTime(i)
+{
+if (i<10) 
+  {i="0" + i}
+  return i
+}
+
+
+
+</script>
+</head>
+
+<body onload="startTime()">
+<div id="txt"></div>
+</body>
+</html>
