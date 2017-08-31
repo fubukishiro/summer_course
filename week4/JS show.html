@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Js-Work</title>
+    <style>
+      .broad{
+	    width: 500px;
+	    height: 250px;
+	    background-color: #FFFFE0;
+	    border: 25px;
+	    border-width: 15px;
+	    border-style: solid;
+	    border-color: #D3D3D3;
+	    margin-top: 20px;
+      }
+    </style>
+</head>
+<body>
+<div class="broad"></div>
+<div class="broad"></div>
+<script type="text/javascript">
+window.onload =function(){
+				var x=document.getElementsByTagName('div');
+				for(var i=0;i<2;i++)
+				{
+					x[i].onmouseover=function(){
+					this.style.background="#EE0000";
+					this.style.borderColor="#171717";
+												}
+				}
+				for(var i=0;i<2;i++)
+				{
+					x[i].onmouseout=function(){
+					this.style.background="#FFFFE0";
+					this.style.borderColor="#D3D3D3";
+												}
+				}
+			}
+</script>
+</body>
+</html>

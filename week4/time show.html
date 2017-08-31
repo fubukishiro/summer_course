@@ -1,0 +1,60 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript">
+function showTime() 
+{
+var now = new Date()  
+var week = now.getDay()
+var year=now.getFullYear()
+var month=now.getMonth()+1
+var date=now.getDate()
+var hour=now.getHours()
+var minute=now.getMinutes()
+var second=now.getSeconds()
+
+switch (week)
+{
+case 0:
+  week="Sunday";
+  break;
+case 1:
+  week="Monday";
+  break;
+case 2:
+  week="Tuesday";
+  break;
+case 3:
+  week="Wednesday";
+  break;
+case 4:
+  week="Thursday";
+  break;
+case 5:
+  week="Friday";
+  break;
+case 6:
+  week="Saturday";
+  break;
+}
+
+month=checkTime(month)
+minute=checkTime(minute)
+second=checkTime(second) 
+document.getElementById('time').innerHTML =year+"年"+month+"月"+date+"日"+"  "+week+"  "+hour+":"+minute+":"+second
+setTimeout('showTime()',1000); 
+} 
+
+function checkTime(i)
+{
+if (i<10) 
+  {i="0" + i}
+  return i
+}
+</script>
+</head>
+
+<body onload="showTime()">
+<div id="time"></div>
+</body>
+</html>
