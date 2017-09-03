@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <p id="time"></p>
+    <script>
+      function update_time()
+      {
+        var mydate = new Date();
+        var year = mydate.getFullYear();
+        var month = mydate.getMonth() + 1;
+        var date = mydate.getDate();
+        var hour = mydate.getHours();
+        var minute = mydate.getMinutes();
+        var second = mydate.getSeconds();
+        var day = mydate.getDay();
+        var Eday = new Array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+        var s = year + "年" + month + "月" + date + "日" + Eday[day] + " " + hour + ":" + minute + ":";
+        if (second < 10) s = s + "0";
+        s = s + second;
+        var p = document.getElementById("time");
+        p.innerHTML = s;
+        setTimeout('update_time()', 1);
+      }
+      update_time();
+    </script>
+  </body>
+</html>
